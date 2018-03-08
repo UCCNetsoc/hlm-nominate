@@ -1,0 +1,32 @@
+doctype 5
+
+html
+  head
+    block head
+      title Nominate HLM
+      meta(charset="utf-8")
+      link(href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/css/materialize.min.css", type="text/css", rel="stylesheet")
+      link(href="https://fonts.googleapis.com/icon?family=Material+Icons", type="text/css", rel="stylesheet")
+      link(href="/static/style.css", type="text/css", rel="stylesheet")
+      script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-alpha.4/js/materialize.min.js")
+      script(src="/static/hlm.js")
+  body
+    .navbar-fixed
+      nav.white
+        .nav-wrapper.container
+          a.brand-logo.center.black-text
+            img(src="//admin.netsoc.co/static/inverted-icon.png")
+          a.sidenav-trigger(href="#", data-target="dropdown")
+            i.material-icons.black-text menu
+          ul.right.hide-on-med-and-down#nav-mobile
+            li: a.black-text(href="https://netsoc.co/rk") Home
+            li: a.black-text(href="https://admin.netsoc.co") Admin
+      ul.sidenav#dropdown
+        li: a.black-text(href="https://netsoc.co/rk") Home
+        li: a.black-text(href="https://admin.netsoc.co") Admin
+    .container
+      .row
+        .col.s12.m8.offset-m2.l6.offset-l3
+          .card
+            .card-content
+              block content

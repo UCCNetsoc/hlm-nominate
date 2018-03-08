@@ -1,0 +1,34 @@
+extends ./layout.jade
+
+block append head
+  script.
+    console.log("d")
+
+block content
+  h4.teal-text Nominate a HLM
+  p We like to recognise people who've contributed significantly to Netsoc by awarding them Honorary Life Member (HLM) status. If you feel someone deserves this recognition — whether they're a current member or not — fill out the form below to nominate them!
+  br
+  form(action="/submit", method="POST")
+    section
+      h5.teal-text Your details
+      .input-field
+        input(name="name", type="text")
+        label(for="name") Your name
+      .input-field
+        input(name="email", type="email")
+        label(for="email") Your email
+    .divider
+    section
+      h5.teal-text Nominee details
+      .input-field
+        input(name="nominee_name", type="text")
+        label(for="nominee_name") Who are you nominating?
+      .input-field
+        input(name="nominee_email", type="email")
+        label(for="nominee_email") Nominee's email
+      .input-field
+        textarea.materialize-textarea(name="reason", data-length="2000", maxlength="2000")
+        label(for="reason") Reason(s) for nomination
+      .input-field
+        button.btn.waves-effect.waves-light(type="submit", name="action") Submit
+          i.material-icons.right send

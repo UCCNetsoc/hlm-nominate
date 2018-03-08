@@ -1,0 +1,4 @@
+flask
+sendgrid
+pyjade
+validate_email
