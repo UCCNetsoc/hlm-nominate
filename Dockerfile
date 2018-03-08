@@ -8,4 +8,5 @@ RUN pip3 install -r /nominate/requirements.txt
 WORKDIR /nominate/webapp
 
 EXPOSE 5000
-ENTRYPOINT ["python3", "app.py"]
+ENV FLASK_APP /nominate/app.py
+CMD ["flask", "run"]
