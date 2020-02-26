@@ -8,7 +8,7 @@ from validate_email import validate_email
 # for Docker Secrets
 sys.path.append('/run/secrets')
 
-import config
+import config  # isort:skip # noqa: E402
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
