@@ -2,7 +2,7 @@ import sys
 
 import sendgrid
 from flask import Flask, render_template, request, session
-from sendgrid.helpers.mail import Content, Email, Mail
+from sendgrid.helpers.mail import Content, From, Mail, To
 from validate_email import validate_email
 
 # for Docker Secrets
@@ -63,10 +63,10 @@ def nominate():
     if len(errors) > 0:
         return render_template("nominated.jade", errors=errors)
 
-    sg = sendgrid.SendGridAPIClient(apikey=config.email_config["api_key"])
-    from_email = Email(config.email_config["from_address"])
-    to_email = Email(config.email_config["to_address"])
-    subject = "[HLM] Nomination for %s" % nominee_name
+    sg = sendgrid.SendGridAPIClient(config.email_config["api_key"])
+    from_email = From(config.email_config["from_address"], name="HLM Nomination Service")
+    to_email = To(config.email_config["to_address"])
+    subject = "Nomination for %s" % nominee_name
 
     content = Content("text/plain", """
     [SENDER DETAILS]
@@ -81,8 +81,8 @@ def nominate():
     \"%s\"
     """ % (sender_name.strip(), sender_email.strip(), nominee_name.strip(), nominee_email.strip(), reason.strip()))
 
-    mail = Mail(from_email, subject, to_email, content)
-    response = sg.client.mail.send.post(request_body=mail.get())
+    mail = Mail(from_email, to_email, subject, content)
+    response = sg.send(mail)
 
     status_code = str(response.status_code)
 
