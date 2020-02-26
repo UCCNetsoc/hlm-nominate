@@ -9,7 +9,7 @@ steps:
 - name: build
   settings:
       tag: latest
-      repo: docker.netsoc.co/public/hlm-nominate.netsoc.co
+      repo: docker.netsoc.co/public/hlm.netsoc.co
       registry: docker.netsoc.co
       username:
           from_secret: registry_pub_user
