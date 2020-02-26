@@ -7,6 +7,7 @@ volumes:
 
 steps: 
 - name: build
+  image: plugins/docker
   settings:
       tag: latest
       repo: docker.netsoc.co/public/hlm.netsoc.co
@@ -70,4 +71,3 @@ name: registry_pub_token
 get:
   path: docker_registry/harbor
   name: harbor_pub_token
-        
