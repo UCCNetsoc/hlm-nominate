@@ -1,14 +1,20 @@
-from flask import Flask
-from flask import render_template, request, session
-import config
+import sys
+
 import sendgrid
-from sendgrid.helpers.mail import *
+from flask import Flask, render_template, request, session
+from sendgrid.helpers.mail import Content, Email, Mail
 from validate_email import validate_email
+
+# for Docker Secrets
+sys.path.append('/run/secrets')
+
+import config
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 app.jinja_env.add_extension("pyjade.ext.jinja.PyJadeExtension")
+
 
 @app.route("/")
 def index():
@@ -16,6 +22,7 @@ def index():
         return render_template("nominated.jade", name=session["nominee_name"])
 
     return render_template("home.jade")
+
 
 @app.route("/submit", methods=["POST"])
 def nominate():
@@ -30,25 +37,25 @@ def nominate():
     nominee_email = form.get("nominee_email", None)
     reason = form.get("reason", None)
 
-    errors = [] # store any input validation errors
+    errors = []  # store any input validation errors
 
-    if sender_name == None or len(sender_name) == 0:
+    if sender_name is None or len(sender_name) == 0:
         errors.append("You forgot to enter your name.")
 
-    if sender_email == None or len(sender_email) == 0:
+    if sender_email is None or len(sender_email) == 0:
         errors.append("You forgot to enter your email.")
     elif not validate_email(sender_email):
         errors.append("The email you entered in your personal details isn't valid.")
 
-    if nominee_name == None or len(nominee_name) == 0:
+    if nominee_name is None or len(nominee_name) == 0:
         errors.append("You forgot to tell us who you're nominating.")
 
-    if nominee_email == None or len(nominee_email) == 0:
+    if nominee_email is None or len(nominee_email) == 0:
         errors.append("You forgot to tell us the email of your nominee.")
     elif not validate_email(nominee_email):
         errors.append("The email address you provided for the nominee isn't valid.")
 
-    if reason == None or len(reason) == 0:
+    if reason is None or len(reason) == 0:
         errors.append("You forgot to tell us why your nominee should receive HLM.")
     elif len(reason) > 2000:
         errors.append("Please limit your reasons for nominating to a maximum of 2000 characters.")

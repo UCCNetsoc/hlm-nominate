@@ -1,12 +1,17 @@
-FROM python:latest
-MAINTAINER "fionnkell@gmail.com"
+FROM python:3.8
+LABEL maintainer="netsoc@uccsocieties.ie"
 
-COPY . /nominate
+WORKDIR /nominate
+
+EXPOSE 5000
+
+ENV FLASK_APP /nominate/app.py
+
+COPY requirements.txt requirements.txt
 
 # install all python requirements
 RUN pip3 install -r /nominate/requirements.txt
-WORKDIR /nominate/webapp
 
-EXPOSE 5000
-ENV FLASK_APP /nominate/app.py
+COPY . .
+
 CMD ["flask", "run", "--host", "0.0.0.0"]
