@@ -1,3 +1,5 @@
+<img src="https://github.com/UCCNetsoc/wiki/raw/master/assets/logo-service-hlms.svg" width="360" />
+
 # HLM Nomination Form
 
 A simple Flask app to help out with Netsoc's HLM nominations.
