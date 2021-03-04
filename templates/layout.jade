@@ -13,21 +13,24 @@ html
       script(src="/static/hlm.js")
   body
     .navbar-fixed
-      nav.white
+      nav.topbar
         .nav-wrapper.container
-          a.brand-logo.center.black-text
-            img(src="//admin.netsoc.co/static/inverted-icon.png")
+          a.brand-logo.center
+            img(src="/static/logo.svg")
           a.sidenav-trigger(href="#", data-target="dropdown")
-            i.material-icons.black-text menu
+            i.material-icons menu
           ul.right.hide-on-med-and-down#nav-mobile
-            li: a.black-text(href="https://netsoc.co/rk") Home
-            li: a.black-text(href="https://admin.netsoc.co") Admin
+            li: a(href="https://netsoc.co/rk") Home
+            li: a(href="https://netsoc.cloud") Cloud
       ul.sidenav#dropdown
-        li: a.black-text(href="https://netsoc.co/rk") Home
-        li: a.black-text(href="https://admin.netsoc.co") Admin
+        li: a(href="https://netsoc.co/rk") Home
+        li: a(href="https://netsoc.cloud") Cloud
     .container
       .row
         .col.s12.m8.offset-m2.l6.offset-l3
           .card
             .card-content
               block content
+    video(class="bg", loop, autoPlay, muted)
+      source(src="/static/servers.mp4", type="video/mp4")
+    video

@@ -8,10 +8,10 @@ from validate_email import validate_email
 # for Docker Secrets
 sys.path.append('/run/secrets')
 
-import config  # isort:skip # noqa: E402
+import config
 
 app = Flask(__name__)
-app.secret_key = config.secret_key
+app.secret_key = config.config["secret_key"]
 
 app.jinja_env.add_extension("pyjade.ext.jinja.PyJadeExtension")
 
@@ -34,7 +34,6 @@ def nominate():
     sender_name = form.get("name", None)
     sender_email = form.get("email", None)
     nominee_name = form.get("nominee_name", None)
-    nominee_email = form.get("nominee_email", None)
     reason = form.get("reason", None)
 
     errors = []  # store any input validation errors
@@ -50,11 +49,6 @@ def nominate():
     if nominee_name is None or len(nominee_name) == 0:
         errors.append("You forgot to tell us who you're nominating.")
 
-    if nominee_email is None or len(nominee_email) == 0:
-        errors.append("You forgot to tell us the email of your nominee.")
-    elif not validate_email(nominee_email):
-        errors.append("The email address you provided for the nominee isn't valid.")
-
     if reason is None or len(reason) == 0:
         errors.append("You forgot to tell us why your nominee should receive HLM.")
     elif len(reason) > 2000:
@@ -63,9 +57,9 @@ def nominate():
     if len(errors) > 0:
         return render_template("nominated.jade", errors=errors)
 
-    sg = sendgrid.SendGridAPIClient(config.email_config["api_key"])
-    from_email = From(config.email_config["from_address"], name="HLM Nomination Service")
-    to_email = To(config.email_config["to_address"])
+    sg = sendgrid.SendGridAPIClient(config.config["api_key"])
+    from_email = From(config.config["from_address"], name="HLM Nomination Service")
+    to_email = To(config.config["to_address"])
     subject = "Nomination for %s" % nominee_name
 
     content = Content("text/plain", """
@@ -75,11 +69,10 @@ def nominate():
 
     [NOMINEE DETAILS]
     Name: %s
-    Email: %s
 
     [REASON]
     \"%s\"
-    """ % (sender_name.strip(), sender_email.strip(), nominee_name.strip(), nominee_email.strip(), reason.strip()))
+    """ % (sender_name.strip(), sender_email.strip(), nominee_name.strip(), reason.strip()))
 
     mail = Mail(from_email, to_email, subject, content)
     response = sg.send(mail)
@@ -88,7 +81,7 @@ def nominate():
 
     if not status_code.startswith("20"):
         error = "There was a problem sending your nomination. Please try again,"\
-                "or email your nomination to %s." % config.email_config["to_address"]
+                "or email your nomination to %s." % config.config["to_address"]
         return render_template("nominated.jade", errors=[error])
 
     session["nominee_name"] = nominee_name.strip()
